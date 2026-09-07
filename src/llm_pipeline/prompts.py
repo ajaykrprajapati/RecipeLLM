@@ -35,22 +35,30 @@ Instructions: {instructions}
 
 User Review: "{review_text}"
 
-Extract the recipe modifications from this review. The user has made changes to improve the recipe.
+Extract ALL recipe modifications from this review. The user may have made MULTIPLE discrete changes.
 
-Output a JSON object with this structure:
-{{
-    "modification_type": "quantity_adjustment|ingredient_substitution|technique_change|addition|removal",
-    "reasoning": "Brief explanation of why this modification improves the recipe",
-    "edits": [
-        {{
-            "target": "ingredients|instructions",
-            "operation": "replace|add_after|remove",
-            "find": "exact text to find",
-            "replace": "replacement text (for replace operations)",
-            "add": "text to add (for add_after operations)"
-        }}
-    ]
-}
+IMPORTANT: Each separate change should be a separate modification object in the array.
+
+Output a JSON array of modification objects:
+[
+    {{
+        "modification_type": "quantity_adjustment|ingredient_substitution|technique_change|addition|removal",
+        "reasoning": "Brief explanation of why this modification improves the recipe",
+        "edits": [
+            {{
+                "target": "ingredients|instructions",
+                "operation": "replace|add_after|remove",
+                "find": "exact text to find",
+                "replace": "replacement text (for replace operations)",
+                "add": "text to add (for add_after operations)"
+            }}
+        ]
+    }}
+]
+
+Examples:
+- If review says "I used less sugar AND added vanilla": Create 2 modification objects
+- If review says "I changed the temperature, time, and removed the nuts": Create 3 modification objects
 
 Focus on concrete changes the user actually made, not general suggestions."""
 
